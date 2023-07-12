@@ -1,0 +1,476 @@
+{
+	"info": {
+		"_postman_id": "0e5e3727-5fc1-4fec-a670-184a35ca4af5",
+		"name": "F&U Real estate",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Save user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Roger\",\n    \"phone\":\"0780000001\",\n    \"email\":\"damn@yopmail.com\",\n    \"user_type\":\"Admin\",\n    \"password\":\"12345\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/user",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Load user by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/user/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Load users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/users",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Emily\",\n    \"phone\":\"0780000002\",\n    \"email\":\"emile@yopmail.com\",\n    \"user_type\":\"Client\",\n    \"password\":\"12345\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/user/2",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"password\":\"12345\",\n    \"username\":\"0780000002\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save Property",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\n            \"brief_description\": \"Inzu nziza iri ku muhanda\",\n            \"property_usage_type\": \"Residential\",\n            \"description\": \"Ifite byose umuntu yakunda\",\n            \"rooms\": \"4\",\n            \"bathroom\": \"2\",\n            \"parking_slots\": \"2\",\n            \"sqm\": \"304\",\n            \"year_built\": \"2019\",\n            \"price\": \"17000000\",\n            \"address\": \"Kabagari\",\n            \"status\": \"For sale\"\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/properties",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"properties"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Load properties",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\n            \"brief_description\": \"Inzu nziza iri ku muhanda\",\n            \"property_usage_type\": \"Residential\",\n            \"description\": \"Ifite byose umuntu yakunda\",\n            \"rooms\": \"4\",\n            \"bathroom\": \"2\",\n            \"parking_slots\": \"2\",\n            \"sqm\": \"304\",\n            \"year_built\": \"2019\",\n            \"price\": \"17000000\",\n            \"address\": \"Kabagari\",\n            \"status\": \"For sale\"\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/properties",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"properties"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Load Property by id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\n            \"brief_description\": \"Inzu nziza yo gucururizamo\",\n            \"property_usage_type\": \"Commercial\",\n            \"description\": \"Ifite byose umuntu yakunda\",\n            \"rooms\": \"0\",\n            \"bathroom\": \"0\",\n            \"parking_slots\": \"0\",\n            \"sqm\": \"4\",\n            \"year_built\": \"2019\",\n            \"price\": \"500000\",\n            \"address\": \"Kabagari\",\n            \"status\": \"For sale\"\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/property/2",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"property",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Property",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"brief_description\": \"Inzu nziza yo gucururizamo\",\n    \"property_usage_type\": \"Commercial\",\n    \"description\": \"Ifite byose umuntu yakunda\",\n    \"rooms\": \"0\",\n    \"bathroom\": \"1\",\n    \"parking_slots\": \"0\",\n    \"sqm\": \"4\",\n    \"year_built\": \"2019\",\n    \"price\": \"500000\",\n    \"address\": \"Kabagari\",\n    \"status\": \"For rent\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/property/2",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"property",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save bid",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"client_id\": \"2\",\n    \"property_id\": \"1\",\n    \"sale_type\": \"Rent\",\n    \"price\": \"450000\",\n    \"payment_mode\": \"1\",\n    \"contract_start\": \"2023-07-05\",\n    \"contract_end\": \"2023-07-05\",\n    \"status\": \"Accepted\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/bid",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"bid"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Load bids",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"client_id\": \"2\",\n    \"property_id\": \"1\",\n    \"sale_type\": \"Rent\",\n    \"price\": \"450000\",\n    \"payment_mode\": \"1\",\n    \"contract_start\": \"2023-07-05\",\n    \"contract_end\": \"2023-07-05\",\n    \"status\": \"Accepted\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/bids",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"bids"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Load bid by id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"client_id\": \"2\",\n    \"property_id\": \"1\",\n    \"sale_type\": \"Rent\",\n    \"price\": \"450000\",\n    \"payment_mode\": \"1\",\n    \"contract_start\": \"2023-07-05\",\n    \"contract_end\": \"2023-07-05\",\n    \"status\": \"Accepted\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/bid/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"bid",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update bid",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"client_id\": \"2\",\n    \"property_id\": \"1\",\n    \"sale_type\": \"Rent\",\n    \"price\": \"450000\",\n    \"payment_mode\": \"Monthly\",\n    \"contract_start\": \"2023-07-05\",\n    \"contract_end\": \"2023-07-05\",\n    \"status\": \"Accepted\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/bid/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"bid",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save sale",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"client_id\": \"2\",\n    \"property_id\": \"1\",\n    \"sale_type\": \"Rent\",\n    \"price\": \"450000\",\n    \"payment_mode\": \"Monthly\",\n    \"contract_start\": \"2023-07-05\",\n    \"contract_end\": \"2024-07-05\",\n    \"status\": \"Accepted\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/sale",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"sale"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Load sale",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"client_id\": \"2\",\n    \"property_id\": \"1\",\n    \"sale_type\": \"Rent\",\n    \"price\": \"450000\",\n    \"payment_mode\": \"Monthly\",\n    \"contract_start\": \"2023-07-05\",\n    \"contract_end\": \"2024-07-05\",\n    \"status\": \"Accepted\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/sales",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"sales"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Load sale by id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"client_id\": \"2\",\n    \"property_id\": \"1\",\n    \"sale_type\": \"Rent\",\n    \"price\": \"450000\",\n    \"payment_mode\": \"Monthly\",\n    \"contract_start\": \"2023-07-05\",\n    \"contract_end\": \"2024-07-05\",\n    \"status\": \"Accepted\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/sale/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"sale",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update sale",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"client_id\": \"2\",\n    \"property_id\": \"1\",\n    \"sale_type\": \"Rent\",\n    \"price\": \"450000\",\n    \"payment_mode\": \"Once\",\n    \"contract_start\": \"2023-07-05\",\n    \"contract_end\": \"2024-07-05\",\n    \"status\": \"Accepted\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/sale/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"sale",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
