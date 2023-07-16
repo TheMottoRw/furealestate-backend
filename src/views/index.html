@@ -359,7 +359,7 @@
             </div>
 
             <div id="property-carousel" class="swiper">
-                <div class="swiper-wrapper">
+                <div class="swiper-wrapper" id="properties-data">
 
                     <div class="carousel-item-b swiper-slide">
                         <div class="card-box-a card-shadow">
@@ -581,12 +581,6 @@
                         </li>
                     </ul>
                 </nav>
-                <div class="copyright-footer">
-                    <p class="copyright color-text-a">
-                        &copy; Copyright
-                        <span class="color-a">Emile</span> All Rights Reserved.
-                    </p>
-                </div>
                 <div class="credits">
                     <!--
                     All the links in the footer should remain intact.
@@ -612,7 +606,78 @@
 
 <!-- Template Main JS File -->
 <script src="/static/assets/js/main.js"></script>
+<script>
+    loadData();
+    async function loadData() {
+        var requestOptions = {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        const data = await fetch("http://localhost:3000/properties", requestOptions)
+            .then(response => response.json())
+            .then(result => result)
+            .catch(error => console.log('error', error));
+        setContent(data);
+    }
+    function setContent(arr){
+        var data = '';
+        for(var i=0;i<arr.length;i++){
+            data += `<div class="carousel-item-b swiper-slide">
+                        <div class="card-box-a card-shadow">
+                            <div class="img-box-a">
+                                <img src="/static/assets/img/property-6.jpg" alt="" class="img-a img-fluid">
+                            </div>
+                            <div class="card-overlay">
+                                <div class="card-overlay-a-content">
+                                    <div class="card-header-a">
+                                        <h2 class="card-title-a">
+                                            <a href="property-single.html">${arr[i].brief_description}
+                                                <br/> </a>
+                                        </h2>
+                                        <h5 style="color:white">${arr[i].property_usage_type}</h5>
+                                    </div>
+                                    <div class="card-body-a">
+                                        <div class="price-box d-flex">
+                                            <span class="price-a">${arr[i].status} | ${new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(arr[i].price)}</span>
+                                        </div>
+                                        <a href="#" class="link-a">Click here to view
+                                            <span class="bi bi-chevron-right"></span>
+                                        </a>
+                                    </div>
+                                    <div class="card-footer-a">
+                                        <ul class="card-info d-flex justify-content-around">
+                                            <li>
+                                                <h4 class="card-info-title">Area</h4>
+                                                <span>${arr[i].sqm}m
+                            <sup>2</sup>
+                          </span>
+                                            </li>
+                                            <li>
+                                                <h4 class="card-info-title">Beds</h4>
+                                                <span>${arr[i].rooms}</span>
+                                            </li>
+                                            <li>
+                                                <h4 class="card-info-title">Baths</h4>
+                                                <span>${arr[i].bathroom}</span>
+                                            </li>
+                                            <li>
+                                                <h4 class="card-info-title">Parking</h4>
+                                                <span>${arr[i].parking_slots}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+      `
+        }
+        document.querySelector("#properties-data").innerHTML=data;
+    }
 
+</script>
 </body>
 
 </html>
