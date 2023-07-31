@@ -43,7 +43,7 @@ const update = (id, obj) => {
             console.log(errId)
             if (errId) reject(errId);
             if (resId.length > 0) {
-                let query = `UPDATE users SET name='${obj.name}',phone='${obj.phone}',email='${obj.email}' WHERE id='${id}'`;
+                let query = `UPDATE users SET name='${obj.name}',phone='${obj.phone}',email='${obj.email}',user_type='${obj.user_type}' WHERE id='${id}'`;
                 db.query(query, (err, res) => {
                     if (err) reject(res)
                     resolve({status: true, message: "User updated successfully"});

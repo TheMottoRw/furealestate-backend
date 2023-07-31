@@ -10,6 +10,7 @@ const save = (obj) => {
     })
 }
 
+
 const load = (id = 0) => {
     let query = "select * from properties";
     let queryId = `select * from properties where id=${id}`;

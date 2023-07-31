@@ -1,0 +1,161 @@
+{% set title="Properties" %}
+{% extends "includes/main-layout.html" %}
+<!-- ======= Header ======= -->
+{% block header %}
+{% include "includes/main-header.html" %}
+{% endblock %}
+<!-- ======= Sidebar ======= -->
+{% block sidebar %}
+{% include "includes/admin-sidebar.html" %}
+{% endblock %}
+{% block content %}
+
+<div class="pagetitle">
+    <h1>Properties registered
+
+        <a href="/v/add-property" class="btn btn-primary bx-pull-right">
+            <i class="bi bi-house-add"></i></a>
+    </h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/v/users">Home</a></li>
+            <li class="breadcrumb-item active">Properties</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row" id="properties-data">
+        <div class="col-lg-6">
+            <!-- Card with an image on left -->
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="/static/niceadmin-assets/img/card.jpg" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Card with an image on left</h5>
+                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                                additional content. This content is a little bit longer.</p>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End Card with an image on left -->
+        </div>
+        <div class="col-lg-6">
+            <!-- Card with an image on left -->
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="/static/niceadmin-assets/img/card.jpg" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Card with an image on left</h5>
+                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                                additional content. This content is a little bit longer.</p>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End Card with an image on left -->
+        </div>
+        <div class="col-lg-6">
+            <!-- Card with an image on left -->
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="/static/niceadmin-assets/img/card.jpg" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Card with an image on left</h5>
+                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                                additional content. This content is a little bit longer.</p>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End Card with an image on left -->
+        </div>
+        <div class="col-lg-6">
+            <!-- Card with an image on left -->
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="/static/niceadmin-assets/img/card.jpg" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Card with an image on left</h5>
+                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                                additional content. This content is a little bit longer.</p>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End Card with an image on left -->
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
+{% block scripts %}
+<script>
+    loadData();
+
+    async function loadData() {
+        var requestOptions = {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        const data = await fetch("http://localhost:3000/properties", requestOptions)
+            .then(response => response.json())
+            .then(result => result)
+            .catch(error => console.log('error', error));
+        setContent(data);
+    }
+
+    function setContent(arr) {
+        var data = '';
+        for (var i = 0; i < arr.length; i++) {
+            data += `<div class="col-lg-6">
+        <!-- Card with an image on left -->
+        <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <img src="/static/assets/img/property-3.jpg" class="img-fluid rounded-start" alt="...">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body profile">
+                <h5 class="card-title">${arr[i].brief_description}
+            <button data-id="${arr[i].id}" data-name="${arr[i].description}" class="btn btn-sm btn-danger bx-pull-right"><i class="bi bi-trash"></i></button>
+            <a href="/v/update-property/${arr[i].id}" class="btn btn-sm btn-primary bx-pull-right"><i class="bi bi-pencil"></i></a>
+                </h5>
+                <p class="card-text profile-edit">
+                    <label>Use: </label>&nbsp;${arr[i].property_usage_type}<br>
+                    <label>Type: </label>&nbsp;&nbsp;${arr[i].status}<br>
+                    <label>Rooms: </label>&nbsp; ${arr[i].rooms}<br>
+                    <label>Bathroom: </label>&nbsp;${arr[i].bathroom}<br>
+                    <label>Parking: </label>&nbsp;${arr[i].parking_slots}<br>
+                    <label>Measurements: </label>&nbsp;${arr[i].sqm}m<sup>2</sup><br>
+                    <label>Price: </label>&nbsp;${new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(arr[i].price)}<br>
+                    <label>Address: </label>&nbsp;${arr[i].address}<br>
+                    <label>Details: </label>&nbsp;${arr[i].description}<br>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div><!-- End Card with an image on left -->
+      </div>
+      `
+        }
+        document.querySelector("#properties-data").innerHTML = data;
+    }
+
+</script>
+{% endblock %}

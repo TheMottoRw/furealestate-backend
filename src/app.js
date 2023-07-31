@@ -6,8 +6,17 @@ import bidRouter from "./routes/bidsRoutes";
 import viewRouter from "./routes/viewsRouter";
 
 import path from "path"
+import nunjucks from "nunjucks";
+import expressNunjucks from 'express-nunjucks';
 
 const app = express();
+const views = __dirname+'/views';
+app.set("views",views);
+const njk = expressNunjucks(app, {
+    watch: true,
+    noCache: true,
+    autoescape:true
+});
 app.use(json())
 app.use(userRouter)
 app.use(propertyRouter)

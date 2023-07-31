@@ -1,0 +1,159 @@
+{% set title="Users" %}
+{% extends "includes/main-layout.html" %}
+<!-- ======= Header ======= -->
+{% block header %}
+{% include "includes/main-header.html" %}
+{% endblock %}
+<!-- ======= Sidebar ======= -->
+{% block sidebar %}
+{% include "includes/admin-sidebar.html" %}
+{% endblock %}
+{% block content %}
+    <div class="pagetitle">
+        <h1>Sales information</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/v/users">Home</a></li>
+                <li class="breadcrumb-item active">Sales</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Sales information</h5>
+
+                        <!-- Bordered Tabs -->
+                        <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="home-tab" data-bs-toggle="tab"
+                                        data-bs-target="#bordered-home" type="button" role="tab" aria-controls="home"
+                                        aria-selected="true">Home
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+                                        data-bs-target="#bordered-profile" type="button" role="tab"
+                                        aria-controls="profile" aria-selected="false">Buyer Profile
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content pt-2" id="borderedTabContent">
+                            <div class="tab-pane fade show active" id="bordered-home" role="tabpanel"
+                                 aria-labelledby="home-tab">
+                                <div class="row g-0"><!-- Propety info-->
+                                    <div class="col-md-4">
+                                        <img src="/static/niceadmin-assets/img/card.jpg" class="img-fluid rounded-start"
+                                             alt="...">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Card with an image on left</h5>
+                                            <p class="card-text">This is a wider card with supporting text below as a
+                                                natural lead-in to additional content. This content is a little bit
+                                                longer.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="bordered-profile" role="tabpanel"
+                                 aria-labelledby="profile-tab">
+                                <b>Name:</b> Roger Manzi<br>
+                                <b>E-Mail:</b> damn@yopmail.com<br>
+                                <b>Phone:</b> 07879565444<br>
+                            </div>
+
+                        </div><!-- End Bordered Tabs -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Sales information</h5>
+
+                        <!-- Bordered Tabs -->
+                        <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab1" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="home-tab1" data-bs-toggle="tab"
+                                        data-bs-target="#bordered-home1" type="button" role="tab" aria-controls="home"
+                                        aria-selected="true">Home
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="profile-tab1" data-bs-toggle="tab"
+                                        data-bs-target="#bordered-profile1" type="button" role="tab"
+                                        aria-controls="profile" aria-selected="false">Buyer Profile
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content pt-2" id="borderedTabContent1">
+                            <div class="tab-pane fade show active" id="bordered-home1" role="tabpanel"
+                                 aria-labelledby="home-tab">
+                                <div class="row g-0"><!-- Propety info-->
+                                    <div class="col-md-4">
+                                        <img src="/static/niceadmin-assets/img/card.jpg" class="img-fluid rounded-start"
+                                             alt="...">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Card with an image on left</h5>
+                                            <p class="card-text">This is a wider card with supporting text below as a
+                                                natural lead-in to additional content. This content is a little bit
+                                                longer.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="bordered-profile1" role="tabpanel"
+                                 aria-labelledby="profile-tab">
+                                <b>Name:</b> Roger Manzi<br>
+                                <b>E-Mail:</b> damn@yopmail.com<br>
+                                <b>Phone:</b> 07879565444<br>
+                            </div>
+
+                        </div><!-- End Bordered Tabs -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<!-- ======= Footer ======= -->
+{% endblock %}
+{% block scripts %}
+<script>
+    loadData();
+    async function loadData() {
+        var requestOptions = {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        const data = await fetch("http://localhost:3000/users", requestOptions)
+            .then(response => response.json())
+            .then(result => result)
+            .catch(error => console.log('error', error));
+        setContent(data);
+    }
+    function setContent(arr){
+        var data = '';
+        for(var i=0;i<arr.length;i++){
+            data += `<tr>
+                <th scope="row">${i+1}</th>
+                <td>${arr[i].name}</td>
+                <td>${arr[i].phone}</td>
+                <td>${arr[i].email}</td>
+                <td>${arr[i].user_type}</td>
+                <td>${arr[i].created_at.replaceAll("T"," ").substring(0,16)}</td>
+            </tr>`
+        }
+        document.querySelector("#users-data").innerHTML=data;
+    }
+</script>
+{% endblock %}
