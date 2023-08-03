@@ -136,7 +136,7 @@
                 "Content-Type": "application/json"
             }
         };
-        const data = await fetch("http://localhost:3000/properties", requestOptions)
+        const data = await fetch("http://localhost:3000/bids", requestOptions)
             .then(response => response.json())
             .then(result => result)
             .catch(error => console.log('error', error));
@@ -194,9 +194,9 @@
                             </div>
                             <div class="tab-pane fade" id="bordered-profile${arr[i].id}" role="tabpanel"
                                  aria-labelledby="profile-tab">
-                                <b>Name:</b> Roger Manzi<br>
-                                <b>E-Mail:</b> damn@yopmail.com<br>
-                                <b>Phone:</b> 07879565444<br>
+                                <b>Name:</b> ${arr[i].name}<br>
+                                <b>E-Mail:</b> ${arr[i].email}<br>
+                                <b>Phone:</b> ${arr[i].phone}<br>
                             </div>
 
                         </div><!-- End Bordered Tabs -->

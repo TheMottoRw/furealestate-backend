@@ -117,6 +117,7 @@
                                     </ul>
                                 </div>
                             </div>
+
                         </div>
                         <div class="col-md-7 col-lg-7 section-md-t3">
                             <div class="row">
@@ -147,7 +148,30 @@
                         </div>
                     </div>
                 </div>
+                <br><br>
             </div>
+            <div class="col-lg-4" id="order-form" style="display: none">
+                <div class="title-box-d section-t4">
+                    <h4 class="title-d">Order information</h4>
+                </div>
+                <div class="alert alert-success" id="responseSuccess" style="display:none"></div>
+                <div class="alert alert-danger" id="responseFail" style="display:none"></div>
+                <div class="col-12">
+                    <label for="contract_start" class="form-label">Contract start</label>
+                    <input type="date" name="price" class="form-control" id="contract_start">
+                </div>
+                <div class="col-12">
+                    <label for="contract_end" class="form-label">Contract end</label>
+                    <input type="date" name="contract_end" class="form-control" id="contract_end">
+                </div>
+                <br>
+                <div class="col-12">
+                    <button type="button" class="btn btn-primary col-lg-12" id="btnSendOrder">Send Order</button>
+                </div>
+                <br>
+            </div>
+            <div class="alert alert-danger" id="noDataFound" style="display: none">No data found</div>
+            <button class="btn btn-success col-lg-4" id="btnOrder">Make Order</button>
         </div>
     </section><!-- End Property Single-->
 
@@ -156,6 +180,53 @@
 {% block scripts %}
 <script>
     loadData();
+    document.querySelector("#contract_start").onchange = () => {
+        document.querySelector("#contract_end").min = document.querySelector("#contract_start").value;
+        document.querySelector("#contract_end").value = "";
+    }
+    document.querySelector("#btnSendOrder").onclick = () => {
+        console.log("Send order requested");
+        sendOrder();
+    }
+    document.querySelector("#btnOrder").onclick = () => {
+        event.preventDefault();
+        console.log(`Order clicked ${localStorage.getItem("id")}`);
+        if (localStorage.getItem("id") === null) {
+            alert("You should signin to make order");
+            window.open("http://localhost:3000/v/login", "_blank");
+        } else {
+            console.log(`User logged in ${localStorage.getItem("id")}`)
+            document.querySelector("#order-form").style='display:block';
+        }
+    }
+    async function sendOrder() {
+        let params_arr = document.URL.split("/")
+        let propertyId = params_arr[params_arr.length - 1];
+        const data = {
+            property_id:propertyId,
+            client_id:localStorage.getItem("id"),
+            contract_start:document.querySelector("#contract_start").value,
+            contract_end:document.querySelector("#contract_end").value
+        }
+        var requestOptions = {
+            method: 'POST',
+            body:JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        const res = await fetch("http://localhost:3000/bid", requestOptions)
+            .then(response => response.json())
+            .then(result => result)
+            .catch(error => console.log('error', error));
+        if(res.status){
+            document.querySelector("#responseSuccess").innerHTML = res.message;
+            document.querySelector("#responseSuccess").style = 'display:block';
+        }else{
+            document.querySelector("#responseFail").innerHTML = res.message;
+            document.querySelector("#responseFail").style = 'display:block';
+        }
+    }
 
     async function loadData() {
         let params_arr = document.URL.split("/")
@@ -175,6 +246,11 @@
 
     function setContent(arr) {
         var data = '';
+        if(arr.length==0){
+            document.querySelector("#noDataFound").style='display:block';
+            document.querySelector("#btnOrder").style='display:none';
+            document.querySelector("#properties-data").innerHTML=`<div style='color:red'>No property data found</div>`
+        }
         for (var i = 0; i < arr.length; i++) {
             document.querySelector("#property_brief").innerHTML = arr[i].brief_description;
             document.querySelector("#property_address").innerHTML = arr[i].address;
@@ -257,6 +333,16 @@
                   <p class="description color-text-a no-margin">
                     ${arr[i].description}.
                   </p>
+                </div>
+                <br><br>
+                <div class="title-box-d section-t4">
+                    <h3 class="title-d">Reviews</h3>
+                </div>
+                <div class="justify-content-md-between" id="review">
+                    <form>
+                        <textarea class="form-control" id="review" cols="3"></textarea><br>
+                        <input type="button" class="btn btn-primary" value="Post a review">
+                    </form>
                 </div>
                 </div>
             </div>

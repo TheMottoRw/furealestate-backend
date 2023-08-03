@@ -142,18 +142,23 @@
         el.innerHTML = "Logged in successfully";
         document.querySelector("#username").value="";
         document.querySelector("#password").value="";
-        let obj = res[0];
-        localStorage.setItem("id",ob.id);
-        localStorage.setItem("name",ob.name);
-        localStorage.setItem("email",ob.email);
-        localStorage.setItem("phone",ob.phone);
-        localStorage.setItem("user_type",ob.user_type);
+        let obj = res.data[0];
+        localStorage.setItem("id",obj.id);
+        localStorage.setItem("name",obj.name);
+        localStorage.setItem("email",obj.email);
+        localStorage.setItem("phone",obj.phone);
+        localStorage.setItem("user_type",obj.user_type);
+        if(obj.user_type=="Admin")
+          window.location='/v/users';
+        else if(obj.user_type=="Landlord")
+          window.location='/v/'
+        else
+          window.location='/v/'
       }else{
         let el = document.querySelector("#responseFail");
         el.setAttribute("style","display:block");
         document.querySelector("#responseSuccess").setAttribute("style","display:none");
         el.innerHTML = res.message;
-
       }
     }
 
