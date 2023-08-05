@@ -8,6 +8,7 @@ import viewRouter from "./routes/viewsRouter";
 import path from "path"
 import nunjucks from "nunjucks";
 import expressNunjucks from 'express-nunjucks';
+import reviewRouter from "./routes/reviewsRoutes";
 
 const app = express();
 const views = __dirname+'/views';
@@ -22,12 +23,13 @@ app.use(userRouter)
 app.use(propertyRouter)
 app.use(saleRouter)
 app.use(bidRouter)
+app.use(reviewRouter)
 app.use(viewRouter)
 const PORT = process.env.PORT || 3000;
 app.use('/static', express.static(path.join(__dirname, 'public')))
 
 app.get('/', async (req, res) => {
-    res.json({ status: true, message: "Our node.js app works" })
+    res.redirect('/v/')
 });
 app.get("/view",async (req,res)=>{
     console.log(path.join(__dirname))

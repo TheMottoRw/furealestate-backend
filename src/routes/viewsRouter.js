@@ -6,6 +6,9 @@ const viewRouter = express.Router();
 
 let views_path = path.join(__dirname,"../views")
 let views_system_path = path.join(views_path,"/mis")
+viewRouter.get("/",async (req,res)=>{
+    res.redirect(`/v/`);
+})
 viewRouter.get("/v/",async (req,res)=>{
     res.render(`${views_path}/index.html`);
 })
@@ -51,6 +54,9 @@ viewRouter.get("/v/bids",async (req,res)=>{
 
 viewRouter.get("/v/sales",async (req,res)=>{
     res.render(`${views_system_path}/in-sales.html`);
+})
+viewRouter.get("/v/reviews",async (req,res)=>{
+    res.render(`${views_system_path}/reviews.html`);
 })
 
 viewRouter.get("/v/profile",async (req,res)=>{

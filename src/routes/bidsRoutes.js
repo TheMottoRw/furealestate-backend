@@ -22,4 +22,8 @@ bidRouter.post("/bid/:id",async (req,res)=>{
     const response = await bids.update(req.params.id,req.body);
     res.send(response);
 })
+bidRouter.post("/bid/status/:id",async (req,res)=>{
+    const response = await bids.rejectOrApprove(req.params.id,req.body);
+    res.send(response);
+})
 export default bidRouter;

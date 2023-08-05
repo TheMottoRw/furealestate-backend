@@ -115,9 +115,25 @@
 
   <!-- Template Main JS File -->
   <script>
+    redirectIfLoggedIn();
     document.querySelector("#btnLogin").onclick=()=>{
       event.preventDefault();
       login();
+    }
+    function redirectIfLoggedIn(){
+      if(isLoggedIn()){
+        let userType = localStorage.getItem("user_type");
+        if(userType==='Admin'){
+          window.location = '/v/users';
+        }else if(userType==='Landlord'){
+          window.location = '/v/properties';
+        }else{
+          window.location = '/v/bids';
+        }
+      }
+    }
+    function isLoggedIn(){
+      return localStorage.getItem("user_type")!==null;
     }
     async function login() {
       const data = {
@@ -153,7 +169,7 @@
         else if(obj.user_type=="Landlord")
           window.location='/v/'
         else
-          window.location='/v/'
+          window.location='/v/bids'
       }else{
         let el = document.querySelector("#responseFail");
         el.setAttribute("style","display:block");

@@ -10,11 +10,11 @@
 {% endblock %}
 {% block content %}
     <div class="pagetitle">
-        <h1>Bids information</h1>
+        <h1>Order information</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/v/users">Home</a></li>
-                <li class="breadcrumb-item active">Bids</li>
+                <li class="breadcrumb-item active">Order</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -24,7 +24,7 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Bidding information</h5>
+                        <h5 class="card-title">Order information</h5>
 
                         <!-- Bordered Tabs -->
                         <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
@@ -37,7 +37,7 @@
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="profile-tab" data-bs-toggle="tab"
                                         data-bs-target="#bordered-profile" type="button" role="tab"
-                                        aria-controls="profile" aria-selected="false">Bidder Profile
+                                        aria-controls="profile" aria-selected="false">Customer Profile
                                 </button>
                             </li>
                         </ul>
@@ -74,7 +74,7 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Bidding information</h5>
+                        <h5 class="card-title">Order information</h5>
 
                         <!-- Bordered Tabs -->
                         <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab1" role="tablist">
@@ -87,7 +87,7 @@
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="profile-tab1" data-bs-toggle="tab"
                                         data-bs-target="#bordered-profile1" type="button" role="tab"
-                                        aria-controls="profile" aria-selected="false">Bidder Profile
+                                        aria-controls="profile" aria-selected="false">Customer Profile
                                 </button>
                             </li>
                         </ul>
@@ -148,10 +148,14 @@
             data +=`<div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Bidding information</h5>
-
+                        <h5 class="card-title">Order information</h5>
+                        `;
+                if(localStorage.getItem('user_type')==='client'){
+                        data+=`<button data-id=${arr[i].id} data-status="${arr[i].status}"  btn-status='reject' onclick="approveOrReject(this)" class="btn btn-sm btn-danger bx-pull-right btnApprove"><i class="bi bi-x-circle-fill"></i></button>
+                        <button data-id=${arr[i].id} data-status="${arr[i].status}" btn-status='approve'  onclick="approveOrReject(this)" class="btn btn-sm btn-success bx-pull-right btnReject"><i class="bi bi-check-circle"></i></button>`
+                }
                         <!-- Bordered Tabs -->
-                        <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab${arr[i].id}" role="tablist">
+                        data+=`<ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab${arr[i].id}" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="home-tab${arr[i].id}" data-bs-toggle="tab"
                                         data-bs-target="#bordered-home${arr[i].id}" type="button" role="tab" aria-controls="home"
@@ -161,7 +165,7 @@
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="profile-tab${arr[i].id}" data-bs-toggle="tab"
                                         data-bs-target="#bordered-profile${arr[i].id}" type="button" role="tab"
-                                        aria-controls="profile" aria-selected="false">Bidder Profile
+                                        aria-controls="profile" aria-selected="false">Customer Profile
                                 </button>
                             </li>
                         </ul>
@@ -187,7 +191,8 @@
                 currency: 'USD'
             }).format(arr[i].price)}<br>
                     <label>Address: </label>&nbsp;${arr[i].address}<br>
-                    <label>Details: </label>&nbsp;${arr[i].description}<br>
+                    <label>Details: </label>&nbsp;${arr[i].description}<br><br><br>
+
                 </p>
               </div>
             </div>                                </div>
@@ -197,6 +202,11 @@
                                 <b>Name:</b> ${arr[i].name}<br>
                                 <b>E-Mail:</b> ${arr[i].email}<br>
                                 <b>Phone:</b> ${arr[i].phone}<br>
+                    <hr>
+                    <h6>Contract info</h6>
+                    <b>Start: </b>&nbsp;${arr[i].contract_start.substring(0,10)}<br>
+                    <b>End: </b>&nbsp;${arr[i].contract_end.substring(0,10)}<br>
+                    <b>Payment type: </b>&nbsp;${arr[i].payment_mode.substring(0,10)}<br>
                             </div>
 
                         </div><!-- End Bordered Tabs -->
@@ -208,6 +218,69 @@
         }
         document.querySelector("#properties-data").innerHTML=data;
     }
+    function approveOrReject(obj){
+        btnStatus = obj.getAttribute("btn-status");
+        const id = obj.getAttribute("data-id");
+        let status = '';
+        console.log(obj.getAttribute('data-status'));
+        switch(obj.getAttribute('data-status')){
+            case 'For sale':
+                status='Sold';
+                break;
+            default:
+                status = 'Rent';
+        }
+        if(btnStatus=='approve'){
+            let confirmationBox = confirm(`Are you sure you want to ${btnStatus} this order?`)
+            if(confirmationBox===true){
+                console.log("request approved")
+                sale(id,status);
+            }else{
+                console.log("request cancelled");
+            }
+        }
+        if(btnStatus=='reject'){
+            let confirmationBox = confirm(`Are you sure you want to ${btnStatus} this order?`)
+            if(confirmationBox===true){
+                reject(id);
+            }else{
+                console.log(`reject cancelled  ${obj.getAttribute('data-id')}-${status}`);
+            }
+        }
+    }
 
+    async function reject(id) {
+        const data = {
+            status:'Rejected'
+        };
+        var requestOptions = {
+            method: 'POST',
+            body:JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        const res = await fetch(`http://localhost:3000/bid/status/${id}`, requestOptions)
+            .then(response => response.json())
+            .then(result => result)
+            .catch(error => console.log('error', error));
+    }
+    async function sale(id,status) {
+        const data = {
+            id:id,
+            status:status
+        };
+        var requestOptions = {
+            method: 'POST',
+            body:JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        const res = await fetch(`http://localhost:3000/sale`, requestOptions)
+            .then(response => response.json())
+            .then(result => result)
+            .catch(error => console.log('error', error));
+    }
 </script>
 {% endblock %}

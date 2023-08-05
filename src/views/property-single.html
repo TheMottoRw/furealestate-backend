@@ -188,6 +188,7 @@
         console.log("Send order requested");
         sendOrder();
     }
+
     document.querySelector("#btnOrder").onclick = () => {
         event.preventDefault();
         console.log(`Order clicked ${localStorage.getItem("id")}`);
@@ -196,21 +197,22 @@
             window.open("http://localhost:3000/v/login", "_blank");
         } else {
             console.log(`User logged in ${localStorage.getItem("id")}`)
-            document.querySelector("#order-form").style='display:block';
+            document.querySelector("#order-form").style = 'display:block';
         }
     }
+
     async function sendOrder() {
         let params_arr = document.URL.split("/")
         let propertyId = params_arr[params_arr.length - 1];
         const data = {
-            property_id:propertyId,
-            client_id:localStorage.getItem("id"),
-            contract_start:document.querySelector("#contract_start").value,
-            contract_end:document.querySelector("#contract_end").value
+            property_id: propertyId,
+            client_id: localStorage.getItem("id"),
+            contract_start: document.querySelector("#contract_start").value,
+            contract_end: document.querySelector("#contract_end").value
         }
         var requestOptions = {
             method: 'POST',
-            body:JSON.stringify(data),
+            body: JSON.stringify(data),
             headers: {
                 "Content-Type": "application/json"
             }
@@ -219,12 +221,40 @@
             .then(response => response.json())
             .then(result => result)
             .catch(error => console.log('error', error));
-        if(res.status){
+        if (res.status) {
             document.querySelector("#responseSuccess").innerHTML = res.message;
             document.querySelector("#responseSuccess").style = 'display:block';
-        }else{
+        } else {
             document.querySelector("#responseFail").innerHTML = res.message;
             document.querySelector("#responseFail").style = 'display:block';
+        }
+    }
+
+    async function sendReview() {
+        let params_arr = document.URL.split("/")
+        let propertyId = params_arr[params_arr.length - 1];
+        const data = {
+            property_id: propertyId,
+            user_id: localStorage.getItem("id"),
+            message: document.querySelector("#textReview").value
+        }
+        var requestOptions = {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        const res = await fetch("http://localhost:3000/review", requestOptions)
+            .then(response => response.json())
+            .then(result => result)
+            .catch(error => console.log('error', error));
+        if (res.status) {
+            document.querySelector("#responseSuccessReview").innerHTML = res.message;
+            document.querySelector("#responseSuccessReview").style = 'display:block';
+        } else {
+            document.querySelector("#responseFailReview").innerHTML = res.message;
+            document.querySelector("#responseFailReview").style = 'display:block';
         }
     }
 
@@ -242,14 +272,27 @@
             .then(result => result)
             .catch(error => console.log('error', error));
         setContent(data);
+
+        document.querySelector("#btnPostReview").onclick = () => {
+            event.preventDefault();
+            console.log(`Order clicked ${localStorage.getItem("id")}`);
+            if (localStorage.getItem("id") === null) {
+                alert("You should signin to send your review");
+                window.open("http://localhost:3000/v/login", "_blank");
+            } else {
+                console.log(`User logged in ${localStorage.getItem("id")}`)
+                sendReview();
+            }
+        }
+
     }
 
     function setContent(arr) {
         var data = '';
-        if(arr.length==0){
-            document.querySelector("#noDataFound").style='display:block';
-            document.querySelector("#btnOrder").style='display:none';
-            document.querySelector("#properties-data").innerHTML=`<div style='color:red'>No property data found</div>`
+        if (arr.length == 0) {
+            document.querySelector("#noDataFound").style = 'display:block';
+            document.querySelector("#btnOrder").style = 'display:none';
+            document.querySelector("#properties-data").innerHTML = `<div style='color:red'>No property data found</div>`
         }
         for (var i = 0; i < arr.length; i++) {
             document.querySelector("#property_brief").innerHTML = arr[i].brief_description;
@@ -340,8 +383,10 @@
                 </div>
                 <div class="justify-content-md-between" id="review">
                     <form>
-                        <textarea class="form-control" id="review" cols="3"></textarea><br>
-                        <input type="button" class="btn btn-primary" value="Post a review">
+                        <div class="alert alert-success" id="responseSuccessReview" style="display:none"></div>
+                        <div class="alert alert-danger" id="responseFailReview" style="display:none"></div>
+                        <textarea class="form-control" id="textReview" cols="3"></textarea><br>
+                        <input type="button" class="btn btn-primary" id="btnPostReview" value="Post a review">
                     </form>
                 </div>
                 </div>
