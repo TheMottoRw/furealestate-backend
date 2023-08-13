@@ -9,7 +9,7 @@ import path from "path"
 import nunjucks from "nunjucks";
 import expressNunjucks from 'express-nunjucks';
 import reviewRouter from "./routes/reviewsRoutes";
-
+import cookieSession from "cookie-session";
 const app = express();
 const views = __dirname+'/views';
 app.set("views",views);
@@ -25,6 +25,15 @@ app.use(saleRouter)
 app.use(bidRouter)
 app.use(reviewRouter)
 app.use(viewRouter)
+
+//Cookies
+app.use(cookieSession({
+    name: 'session',
+    keys: ["furealestate"],
+
+    // Cookie Options
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}))
 const PORT = process.env.PORT || 3000;
 app.use('/static', express.static(path.join(__dirname, 'public')))
 

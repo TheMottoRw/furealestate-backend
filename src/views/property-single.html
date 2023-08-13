@@ -149,6 +149,15 @@
                     </div>
                 </div>
                 <br><br>
+                <div class="chat-reviews" id="chat-reviews">
+                    <div class="d-flex flex-row justify-content-start mb-4">
+                        <div class="p-3 ms-3" style="border-radius: 15px; background-color: rgba(57, 237, 192,.2);">
+                            <b>Asua</b>
+                            <p class="small mb-0">Hello and thank you for visiting MDBootstrap. Please click the video
+                                below.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-lg-4" id="order-form" style="display: none">
                 <div class="title-box-d section-t4">
@@ -180,6 +189,7 @@
 {% block scripts %}
 <script>
     loadData();
+    loadReviews();
     document.querySelector("#contract_start").onchange = () => {
         document.querySelector("#contract_end").min = document.querySelector("#contract_start").value;
         document.querySelector("#contract_end").value = "";
@@ -285,6 +295,30 @@
             }
         }
 
+    }
+    async function loadReviews() {
+        let params_arr = document.URL.split("/")
+        let propertyId = params_arr[params_arr.length - 1];
+        var requestOptions = {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        const data = await fetch("http://localhost:3000/review/property/" + propertyId, requestOptions)
+            .then(response => response.json())
+            .then(result => result)
+            .catch(error => console.log('error', error));
+        let text='';
+        for (let i =0;i<data.length;i++){
+            text +=`<div className="d-flex flex-row justify-content-start mb-4">
+                <div className="p-3 ms-3" style="border-radius: 15px; background-color: rgba(57, 237, 192,.2);padding:10px">
+                    <b>${data[i].name}</b>
+                    <p className="small mb-0">${data[i].message}.</p>
+                </div>
+            </div><br>`;
+        }
+        document.querySelector("#chat-reviews").innerHTML=text;
     }
 
     function setContent(arr) {

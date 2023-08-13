@@ -8,6 +8,9 @@ userRouter.post("/user",async (req,res)=>{
 })
 userRouter.post("/login",async (req,res)=>{
     const response = await users.login(req.body);
+    if(response.status){
+        res.cookie("user_type",response.data[0].user_type);
+    }
     res.send(response);
 })
 userRouter.get("/users",async (req,res)=>{

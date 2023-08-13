@@ -6,7 +6,7 @@
 {% endblock %}
 <!-- ======= Sidebar ======= -->
 {% block sidebar %}
-{% include "includes/admin-sidebar.html" %}
+{% include layout %}
 {% endblock %}
 {% block content %}
     <div class="pagetitle">
@@ -20,7 +20,7 @@
     </div><!-- End Page Title -->
 
     <section class="section">
-        <div class="row">
+        <div class="row" id="properties-data">
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
@@ -135,7 +135,7 @@
                 "Content-Type": "application/json"
             }
         };
-        const data = await fetch("http://localhost:3000/users", requestOptions)
+        const data = await fetch("http://localhost:3000/bids", requestOptions)
             .then(response => response.json())
             .then(result => result)
             .catch(error => console.log('error', error));
@@ -144,16 +144,78 @@
     function setContent(arr){
         var data = '';
         for(var i=0;i<arr.length;i++){
-            data += `<tr>
-                <th scope="row">${i+1}</th>
-                <td>${arr[i].name}</td>
-                <td>${arr[i].phone}</td>
-                <td>${arr[i].email}</td>
-                <td>${arr[i].user_type}</td>
-                <td>${arr[i].created_at.replaceAll("T"," ").substring(0,16)}</td>
-            </tr>`
+            data +=`<div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Order information</h5>
+                        `;
+            if(localStorage.getItem('user_type')==='client'){
+                data+=`<button data-id=${arr[i].id} data-status="${arr[i].status}"  btn-status='reject' onclick="approveOrReject(this)" class="btn btn-sm btn-danger bx-pull-right btnApprove"><i class="bi bi-x-circle-fill"></i></button>
+                        <button data-id=${arr[i].id} data-status="${arr[i].status}" btn-status='approve'  onclick="approveOrReject(this)" class="btn btn-sm btn-success bx-pull-right btnReject"><i class="bi bi-check-circle"></i></button>`
+            }
+            <!-- Bordered Tabs -->
+            data+=`<ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab${arr[i].id}" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="home-tab${arr[i].id}" data-bs-toggle="tab"
+                                        data-bs-target="#bordered-home${arr[i].id}" type="button" role="tab" aria-controls="home"
+                                        aria-selected="true">Home
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="profile-tab${arr[i].id}" data-bs-toggle="tab"
+                                        data-bs-target="#bordered-profile${arr[i].id}" type="button" role="tab"
+                                        aria-controls="profile" aria-selected="false">Customer Profile
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content pt-2" id="borderedTabContent${arr[i].id}">
+                            <div class="tab-pane fade show active" id="bordered-home${arr[i].id}" role="tabpanel"
+                                 aria-labelledby="home-tab">
+                                <div class="row g-0"><!-- Propety info-->
+                                    <div class="col-md-4">
+              <img src="/static/assets/img/property-3.jpg" class="img-fluid rounded-start" alt="...">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body profile">
+                <h5 class="card-title">${arr[i].brief_description}</h5>
+                <p class="card-text profile-edit">
+                    <label>Use: </label>&nbsp;${arr[i].property_usage_type}<br>
+                    <label>Type: </label>&nbsp;&nbsp;${arr[i].status}<br>
+                    <label>Rooms: </label>&nbsp; ${arr[i].rooms}<br>
+                    <label>Bathroom: </label>&nbsp;${arr[i].bathroom}<br>
+                    <label>Parking: </label>&nbsp;${arr[i].parking_slots}<br>
+                    <label>Measurements: </label>&nbsp;${arr[i].sqm}m<sup>2</sup><br>
+                    <label>Price: </label>&nbsp;${new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(arr[i].price)}<br>
+                    <label>Address: </label>&nbsp;${arr[i].address}<br>
+                    <label>Details: </label>&nbsp;${arr[i].description}<br><br><br>
+
+                </p>
+              </div>
+            </div>                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="bordered-profile${arr[i].id}" role="tabpanel"
+                                 aria-labelledby="profile-tab">
+                                <b>Name:</b> ${arr[i].name}<br>
+                                <b>E-Mail:</b> ${arr[i].email}<br>
+                                <b>Phone:</b> ${arr[i].phone}<br>
+                    <hr>
+                    <h6>Contract info</h6>
+                    <b>Start: </b>&nbsp;${arr[i].contract_start.substring(0,10)}<br>
+                    <b>End: </b>&nbsp;${arr[i].contract_end.substring(0,10)}<br>
+                    <b>Payment type: </b>&nbsp;${arr[i].payment_mode.substring(0,10)}<br>
+                            </div>
+
+                        </div><!-- End Bordered Tabs -->
+
+                    </div>
+                </div>
+            </div>
+            `
         }
-        document.querySelector("#users-data").innerHTML=data;
+        document.querySelector("#properties-data").innerHTML=data;
     }
 </script>
 {% endblock %}

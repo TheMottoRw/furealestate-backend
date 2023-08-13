@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>{{ title }} - F&U Real estate management</title>
+    <title>{{ title }} - F&U Real estate management {{ res.cookies }}</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -71,7 +71,14 @@
 <!-- Template Main JS File -->
 <script src="/static/niceadmin-assets/js/main.js"></script>
 <script src="/static/assets/js/utils.js"></script>
-
+<script>
+    document.querySelector("#aLogout").onclick=(event)=>{
+        event.preventDefault();
+        alert("Clicked");
+        localStorage.clear();
+        window.location='/v/login'
+    }
+</script>
 {% endblock %}
 
 {% block scripts %}{% endblock %}
