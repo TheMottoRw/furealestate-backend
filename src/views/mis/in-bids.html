@@ -20,107 +20,9 @@
     </div><!-- End Page Title -->
 
     <section class="section">
+        <div id="responseSuccess" class="alert alert-success" style="display: none;"></div>
+        <div id="responseFail" class="alert alert-danger" style="display: none;"></div>
         <div class="row" id="properties-data">
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Order information</h5>
-
-                        <!-- Bordered Tabs -->
-                        <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="home-tab" data-bs-toggle="tab"
-                                        data-bs-target="#bordered-home" type="button" role="tab" aria-controls="home"
-                                        aria-selected="true">Home
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="profile-tab" data-bs-toggle="tab"
-                                        data-bs-target="#bordered-profile" type="button" role="tab"
-                                        aria-controls="profile" aria-selected="false">Customer Profile
-                                </button>
-                            </li>
-                        </ul>
-                        <div class="tab-content pt-2" id="borderedTabContent">
-                            <div class="tab-pane fade show active" id="bordered-home" role="tabpanel"
-                                 aria-labelledby="home-tab">
-                                <div class="row g-0"><!-- Propety info-->
-                                    <div class="col-md-4">
-                                        <img src="/static/niceadmin-assets/img/card.jpg" class="img-fluid rounded-start"
-                                             alt="...">
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Card with an image on left</h5>
-                                            <p class="card-text">This is a wider card with supporting text below as a
-                                                natural lead-in to additional content. This content is a little bit
-                                                longer.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="bordered-profile" role="tabpanel"
-                                 aria-labelledby="profile-tab">
-                                <b>Name:</b> Roger Manzi<br>
-                                <b>E-Mail:</b> damn@yopmail.com<br>
-                                <b>Phone:</b> 07879565444<br>
-                            </div>
-
-                        </div><!-- End Bordered Tabs -->
-
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Order information</h5>
-
-                        <!-- Bordered Tabs -->
-                        <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab1" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="home-tab1" data-bs-toggle="tab"
-                                        data-bs-target="#bordered-home1" type="button" role="tab" aria-controls="home"
-                                        aria-selected="true">Home
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="profile-tab1" data-bs-toggle="tab"
-                                        data-bs-target="#bordered-profile1" type="button" role="tab"
-                                        aria-controls="profile" aria-selected="false">Customer Profile
-                                </button>
-                            </li>
-                        </ul>
-                        <div class="tab-content pt-2" id="borderedTabContent1">
-                            <div class="tab-pane fade show active" id="bordered-home1" role="tabpanel"
-                                 aria-labelledby="home-tab">
-                                <div class="row g-0"><!-- Propety info-->
-                                    <div class="col-md-4">
-                                        <img src="/static/niceadmin-assets/img/card.jpg" class="img-fluid rounded-start"
-                                             alt="...">
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Card with an image on left</h5>
-                                            <p class="card-text">This is a wider card with supporting text below as a
-                                                natural lead-in to additional content. This content is a little bit
-                                                longer.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="bordered-profile1" role="tabpanel"
-                                 aria-labelledby="profile-tab">
-                                <b>Name:</b> Roger Manzi<br>
-                                <b>E-Mail:</b> damn@yopmail.com<br>
-                                <b>Phone:</b> 07879565444<br>
-                            </div>
-
-                        </div><!-- End Bordered Tabs -->
-
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -136,7 +38,14 @@
                 "Content-Type": "application/json"
             }
         };
-        const data = await fetch("http://localhost:3000/bids", requestOptions)
+        let url="http://localhost:3000/bids";
+        if(localStorage.getItem("user_type").toLocaleLowerCase()==="landlord"){
+            url = `http://localhost:3000/owner/bids/${localStorage.getItem("id")}`
+        }
+        if(localStorage.getItem("user_type").toLocaleLowerCase()==="client"){
+            url = `http://localhost:3000/client/bids/${localStorage.getItem("id")}`
+        }
+        const data = await fetch(url, requestOptions)
             .then(response => response.json())
             .then(result => result)
             .catch(error => console.log('error', error));
@@ -150,9 +59,13 @@
                     <div class="card-body">
                         <h5 class="card-title">Order information</h5>
                         `;
-                if(localStorage.getItem('user_type')==='client'){
+                if(localStorage.getItem('user_type').toLowerCase()!=='client' && arr[i].bid_status.toLowerCase()=="pending"){
                         data+=`<button data-id=${arr[i].id} data-status="${arr[i].status}"  btn-status='reject' onclick="approveOrReject(this)" class="btn btn-sm btn-danger bx-pull-right btnApprove"><i class="bi bi-x-circle-fill"></i></button>
                         <button data-id=${arr[i].id} data-status="${arr[i].status}" btn-status='approve'  onclick="approveOrReject(this)" class="btn btn-sm btn-success bx-pull-right btnReject"><i class="bi bi-check-circle"></i></button>`
+                }else if(arr[i].bid_status.toLowerCase()=="rejected"){
+                    data+=`<button data-id=${arr[i].id} data-status="${arr[i].status}"  btn-status='reject' class="btn btn-sm btn-danger bx-pull-right">${arr[i].bid_status}</button>`
+                }else if(localStorage.getItem('user_type').toLowerCase()==='client' && arr[i].bid_status.toLowerCase()=="pending"){
+                    data+=`<button data-id=${arr[i].id} data-status="${arr[i].status}"  btn-status='reject' class="btn btn-sm btn-secondary bx-pull-right">${arr[i].bid_status}</button>`
                 }
                         <!-- Bordered Tabs -->
                         data+=`<ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab${arr[i].id}" role="tablist">
@@ -264,6 +177,16 @@
             .then(response => response.json())
             .then(result => result)
             .catch(error => console.log('error', error));
+            if(res.status){
+                document.querySelector("#responseSuccess").innerHTML=res.message;
+                document.querySelector("#responseSuccess").style="display:block";
+                document.querySelector("#responseFail").style="display:none";
+            }else{
+                document.querySelector("#responseSuccess").style="display:none";
+                document.querySelector("#responseFail").style="display:block";
+                document.querySelector("#responseFail").innerHTML = res.message;
+            }
+        loadData();
     }
     async function sale(id,status) {
         const data = {
@@ -281,6 +204,16 @@
             .then(response => response.json())
             .then(result => result)
             .catch(error => console.log('error', error));
+            if(res.status){
+                document.querySelector("#responseSuccess").innerHTML=res.message;
+                document.querySelector("#responseSuccess").style="display:block";
+                document.querySelector("#responseFail").style="display:none";
+            }else{
+                document.querySelector("#responseSuccess").style="display:none";
+                document.querySelector("#responseFail").style="display:block";
+                document.querySelector("#responseFail").innerHTML = res.message;
+            }
+            loadData();
     }
 </script>
 {% endblock %}

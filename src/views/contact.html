@@ -23,7 +23,7 @@
                     <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="index.html">Home</a>
+                                <a href="/v/">Home</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">
                                 Contact
@@ -40,30 +40,32 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-7">
-                    <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+                    <form role="form" class="php-email-form">
+                        <div class="alert alert-success" id="responseSuccess" style="display: none;"></div>
+                        <div class="alert alert-danger" id="responseFail" style="display: none;"></div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
-                                    <input type="text" name="name" class="form-control form-control-lg form-control-a"
+                                    <input type="text" name="name" class="form-control form-control-lg form-control-a" id="name"
                                            placeholder="Your Name" required>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
-                                    <input name="email" type="email" class="form-control form-control-lg form-control-a"
+                                    <input name="email" type="email" id="email" class="form-control form-control-lg form-control-a"
                                            placeholder="Your Email" required>
                                 </div>
                             </div>
                             <div class="col-md-12 mb-3">
                                 <div class="form-group">
-                                    <input type="text" name="subject"
+                                    <input type="text" name="subject" id="subject"
                                            class="form-control form-control-lg form-control-a" placeholder="Subject"
                                            required>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <textarea name="message" class="form-control" name="message" cols="45" rows="8"
+                                    <textarea name="message" class="form-control" id="message" name="message" cols="45" rows="8"
                                               placeholder="Message" required></textarea>
                                 </div>
                             </div>
@@ -76,7 +78,7 @@
                             </div>
 
                             <div class="col-md-12 text-center">
-                                <button type="submit" class="btn btn-a">Send Message</button>
+                                <button type="button" id="btnSendMessage" class="btn btn-a">Send Message</button>
                             </div>
                         </div>
                     </form>
@@ -95,7 +97,7 @@
                                     <span class="color-a">info@furealestates.com</span>
                                 </p>
                                 <p class="mb-1">F&R Phone.
-                                    <span class="color-a"> +250 788 357 993</span>
+                                    <span class="color-a"> +250 783 734 066</span>
                                 </p>
                             </div>
                         </div>
@@ -122,4 +124,56 @@
     </section><!-- End Contact Single-->
 
 </main><!-- End #main -->
+{% endblock %}
+{% block scripts %}
+<script>
+    document.querySelector("#btnSendMessage").onclick = function(){
+        sendContact();
+    }
+    async function sendContact() {
+      const data = {
+        name:document.querySelector("#name").value,
+        email:document.querySelector("#email").value,
+        subject:document.querySelector("#subject").value,
+        message:document.querySelector("#message").value
+      }
+      var requestOptions = {
+        method: 'POST',
+        body:JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      };
+      const res = await fetch("http://localhost:3000/contactus", requestOptions)
+              .then(response => response.json())
+              .then(result => result)
+              .catch(error => console.log('error', error));
+      if(res.status){
+        let el = document.querySelector("#responseSuccess");
+        el.setAttribute("style","display:block");
+        document.querySelector("#responseFail").setAttribute("style","display:none");
+        el.innerHTML = "Logged in successfully";
+        document.querySelector("#username").value="";
+        document.querySelector("#password").value="";
+        let obj = res.data[0];
+        localStorage.setItem("id",obj.id);
+        localStorage.setItem("name",obj.name);
+        localStorage.setItem("email",obj.email);
+        localStorage.setItem("phone",obj.phone);
+        localStorage.setItem("user_type",obj.user_type);
+        if(obj.user_type=="Admin")
+          window.location='/v/users';
+        else if(obj.user_type=="Landlord")
+          window.location='/v/'
+        else
+          window.location='/v/bids'
+      }else{
+        let el = document.querySelector("#responseFail");
+        el.setAttribute("style","display:block");
+        document.querySelector("#responseSuccess").setAttribute("style","display:none");
+        el.innerHTML = res.message;
+      }
+    }
+
+  </script>
 {% endblock %}

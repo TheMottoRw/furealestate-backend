@@ -13,7 +13,7 @@
     <h1>Add property</h1>
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/v/users">Home</a></li>
+            <li class="breadcrumb-item"><a href="/v">Home</a></li>
             <li class="breadcrumb-item active">Add property</li>
         </ol>
     </nav>
@@ -21,7 +21,7 @@
 
 <section class="section">
     <div class="row">
-        <div class="col-lg-6 offset-3">
+        <div class="col-lg-10 offset-1">
 
             <div class="card">
                 <div class="card-body">
@@ -108,6 +108,12 @@
                                 <input type="text" class="form-control" id="address" placeholder="street number">
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <label for="photos" class="col-sm-2 col-form-label">Photos</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="file" id="photos" multiple/>
+                            </div>
+                        </div>
 
                         <div class="row mb-3">
                             <label for="description" class="col-sm-2 col-form-label">Detailed Description</label>
@@ -145,25 +151,30 @@
     }
 
     async function save() {
-        const data = {
-            code: document.querySelector("#code_number").value,
-            brief_description: document.querySelector("#briefDescription").value,
-            property_usage_type: document.querySelector("#property_usage_type").value,
-            description: document.querySelector("#description").value,
-            rooms: document.querySelector("#rooms").value,
-            bathroom: document.querySelector("#bathroom").value,
-            parking_slots: document.querySelector("#parking_slots").value,
-            sqm: document.querySelector("#sqm").value,
-            year_built: document.querySelector("#year_built").value,
-            price: document.querySelector("#price").value,
-            address: document.querySelector("#address").value,
-            status: document.querySelector("#status").value
+        let formData = new FormData();
+        let el = document.querySelector("#photos").files;
+        for (let i = 0; i < el.length; i++) {
+            formData.append("photos", el[i]);
         }
+        formData.append("user_id", localStorage.getItem("id"));
+        formData.append("code", document.querySelector("#code_number").value);
+        formData.append("brief_description", document.querySelector("#briefDescription").value);
+        formData.append("property_usage_type", document.querySelector("#property_usage_type").value);
+        formData.append("description", document.querySelector("#description").value);
+        formData.append("rooms", document.querySelector("#rooms").value);
+        formData.append("bathroom", document.querySelector("#bathroom").value);
+        formData.append("parking_slots", document.querySelector("#parking_slots").value);
+        formData.append("sqm", document.querySelector("#sqm").value);
+        formData.append("year_built", document.querySelector("#year_built").value);
+        formData.append("price", document.querySelector("#price").value);
+        formData.append("address", document.querySelector("#address").value);
+        formData.append("status", document.querySelector("#status").value);
+
         var requestOptions = {
             method: 'POST',
-            body: JSON.stringify(data),
+            body: formData,
             headers: {
-                "Content-Type": "application/json"
+                //"Content-Type": "application/json"
             }
         };
         const res = await fetch("http://localhost:3000/property", requestOptions)

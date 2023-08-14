@@ -179,6 +179,35 @@
 
 <!-- Template Main JS File -->
 <script src="/static/assets/js/main.js"></script>
+<script>
+    setActiveLink();
+    function setActiveLink(){        
+        let route = ["v","about","property","contact"]
+        let links = document.querySelectorAll(".nav-link");
+        let url = document.documentURI,urlArr = url.split("/");
+        if(urlArr[urlArr.length-1] == "") urlArr.pop();
+        let currentUrl = urlArr[urlArr.length-1];
+
+          if(currentUrl=="") currentUrl=urlArr[urlArr.length-2];
+        console.log(currentUrl);
+    for(let i=0;i<links.length;i++){
+        let linkArr = links[i].href.toString().split("/");
+        if(linkArr[linkArr.length-1]=="") linkArr.pop();
+        let linkRoute = linkArr[linkArr.length-1];
+        if(linkRoute===currentUrl){
+            links[i].classList.add("active")
+        }else{
+            links[i].classList.remove("active")
+        }
+    }
+    }
+
+    if(localStorage.getItem("name")!==null){
+        document.querySelectorAll(".nav-link")[4].innerHTML=localStorage.getItem("name")
+        document.querySelectorAll(".nav-link")[4].style="color:darkblue;"
+    }
+
+</script>
 {% block scripts %}
 {% endblock %}
 </body>

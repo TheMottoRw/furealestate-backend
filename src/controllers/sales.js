@@ -14,16 +14,15 @@ const save = (obj) => {
                     saleType = "Rent";
                 }
                 let query = `INSERT INTO sales SET property_id='${bidInfo.property_id}',client_id='${bidInfo.client_id}',sale_type='${saleType}',payment_mode='${bidInfo.payment_mode}',price='${bidInfo.price}',contract_start='${bidInfo.contract_start.toISOString().substring(0,10)}',contract_end='${bidInfo.contract_end.toISOString().substring(0,10)}',status='${obj.status}'`;
-                if (err) reject(err);
+                if (err) console.log(err);
                 db.query(query,(err, res)=>{
                     if(err) console.log(err);
                 });
-
-                let queryUpdateBid = `UPDATE bid SET status='Accepted' WHERE id='${bidInfo.property_id}'`;
+                let queryUpdateBid = `UPDATE bid SET status='Accepted' WHERE id='${bidInfo.id}'`;
                db.query(queryUpdateBid,(err, res)=>{
                    if(err) console.log(err);
                });
-                let queryUpdateProperty = `UPDATE properties SET status='${obj.status}' WHERE id='${obj.id}'`;
+                let queryUpdateProperty = `UPDATE properties SET status='${obj.status}' WHERE id='${bidInfo.propertyId}'`;
                db.query(queryUpdateProperty,(err, res)=>{
                    if(err) console.log(err);
                });
@@ -54,7 +53,7 @@ const load = (id = 0) => {
     })
 }
 const loadByClient = (clientId = "") => {
-    let queryType = `select * from sales where client_id=${clientId}`;
+    let queryType = `select *,sales.status as bid_status from sales where client_id=${clientId}`;
     return new Promise((resolve, reject) => {
         db.query(queryType, (err, res) => {
             if (err) reject(err);
@@ -63,7 +62,7 @@ const loadByClient = (clientId = "") => {
     })
 }
 const loadByProperty = (propertyId = "") => {
-    let queryType = `select * from sales where property_id=${propertyId}`;
+    let queryType = `select *,sales.status as bid_status from sales where property_id=${propertyId}`;
     return new Promise((resolve, reject) => {
         db.query(queryType, (err, res) => {
             if (err) reject(err);

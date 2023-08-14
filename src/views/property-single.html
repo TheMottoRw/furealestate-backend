@@ -43,7 +43,7 @@
             <div class="row justify-content-center">
                 <div class="col-lg-8">
                     <div id="property-single-carousel" class="swiper">
-                        <div class="swiper-wrapper">
+                        <div class="swiper-wrapper" id="property-single-images">
                             <div class="carousel-item-b swiper-slide">
                                 <img src="/static/assets/img/slide-1.jpg" alt="">
                             </div>
@@ -205,6 +205,8 @@
         if (localStorage.getItem("id") === null) {
             alert("You should signin to make order");
             window.open("http://localhost:3000/v/login", "_blank");
+        } else if (localStorage.getItem("user_type").toLowerCase() !== "client") {
+            alert("You should sign in as client to send your review");
         } else {
             console.log(`User logged in ${localStorage.getItem("id")}`)
             document.querySelector("#order-form").style = 'display:block';
@@ -282,6 +284,7 @@
             .then(result => result)
             .catch(error => console.log('error', error));
         setContent(data);
+        setContentImages(data);
 
         document.querySelector("#btnPostReview").onclick = () => {
             event.preventDefault();
@@ -296,6 +299,7 @@
         }
 
     }
+
     async function loadReviews() {
         let params_arr = document.URL.split("/")
         let propertyId = params_arr[params_arr.length - 1];
@@ -309,16 +313,16 @@
             .then(response => response.json())
             .then(result => result)
             .catch(error => console.log('error', error));
-        let text='';
-        for (let i =0;i<data.length;i++){
-            text +=`<div className="d-flex flex-row justify-content-start mb-4">
+        let text = '';
+        for (let i = 0; i < data.length; i++) {
+            text += `<div className="d-flex flex-row justify-content-start mb-4">
                 <div className="p-3 ms-3" style="border-radius: 15px; background-color: rgba(57, 237, 192,.2);padding:10px">
                     <b>${data[i].name}</b>
                     <p className="small mb-0">${data[i].message}.</p>
                 </div>
             </div><br>`;
         }
-        document.querySelector("#chat-reviews").innerHTML=text;
+        document.querySelector("#chat-reviews").innerHTML = text;
     }
 
     function setContent(arr) {
@@ -431,5 +435,19 @@
         document.querySelector("#properties-data").innerHTML = data;
     }
 
+    function setContentImages(arr) {
+        let data = "";
+        for (let i = 0; i < arr.length; i++) {
+            data += `<div class="carousel-item-b swiper-slide">`
+            if (arr[i].photos !== '' && arr[i].photos !== 'undefined' && arr[i].photos.length > 0) {
+                let obj = JSON.parse(arr[i].photos);
+                data += `<img src="http://localhost:3000/images/${obj[0].filename}" alt="" class="img-a img-fluid">`
+            } else {
+                data += `<img src="/static/assets/img/slide-1.jpg" alt="" class="img-a img-fluid" >`
+            }
+            data += `</div>`
+        }
+        // document.querySelector("#property-single-images").innerHTML = data;
+    }
 </script>
 {% endblock %}
