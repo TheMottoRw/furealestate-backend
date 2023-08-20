@@ -35,16 +35,16 @@ bidRouter.post("/bid/status/:id",async (req,res)=>{
     res.send(response);
 })
 bidRouter.get("/adminsold/bids",async (req,res)=>{
-    const response = await bids.loadSoldOrRent();
+    const response = await bids.loadSoldOrRent(0,"Admin",req.query);
     res.send(response);
 })
 bidRouter.get("/sold/bids",async (req,res)=>{
-    const response = await bids.loadSoldOrRent(req.query.landlord,"Landlord");
+    const response = await bids.loadSoldOrRent(req.query.landlord,"Landlord",req.query);
     res.send(response);
 })
 bidRouter.get("/bought/bids",async (req,res)=>{
     console.log("Requested")
-    const response = await bids.loadSoldOrRent(req.query.client,"Client");
+    const response = await bids.loadSoldOrRent(req.query.client,"Client",req.query);
     res.send(response);
 })
 export default bidRouter;

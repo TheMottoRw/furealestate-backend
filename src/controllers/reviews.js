@@ -1,8 +1,14 @@
 import db from "../db"
-
+import validators from "../helper/validators";
+const validateInput = (obj,resolve)=>{
+    if(obj.message.trim()==="") resolve({status:false,message:"Message should not be empty"});
+    if(isNaN(obj.user_id)) resolve({status:false,message:"Reviewer not found"});
+    if(isNaN(obj.property_id)) resolve({status:false,message:"Property not found"});
+}
 const save = (obj) => {
     let query = `INSERT INTO reviews SET user_id='${obj.user_id}',property_id='${obj.property_id}',message='${obj.message}'`;
     return new Promise((resolve, reject) => {
+        validateInput(obj,resolve)
         db.query(query, (err, res) => {
             if (err) reject(err);
             resolve({status: true, message: "Review sent successfully"});

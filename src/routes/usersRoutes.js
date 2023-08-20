@@ -1,8 +1,11 @@
 import express from "express";
 import users from "../controllers/users";
+import validators from "../helper/validators";
 const userRouter = express.Router();
 
+
 userRouter.post("/user",async (req,res)=>{
+    console.log(req.body)
     const response = await users.save(req.body);
     res.send(response);
 })

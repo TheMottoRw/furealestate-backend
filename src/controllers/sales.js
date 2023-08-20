@@ -5,14 +5,10 @@ const save = (obj) => {
     return new Promise((resolve, reject) => {
        db.query(queryBid, (err, res) => {
            if(err) console.log(err);
-            let saleType="";
+            let saleType="Rent";
            if (res.length > 0) {
                 let bidInfo = res[0];
-                if(bidInfo.sale_type=='Sell'){
-                    saleType = "Sold";
-                }else{
-                    saleType = "Rent";
-                }
+                if(bidInfo.sale_type=='Sell') saleType = "Sold";
                 let query = `INSERT INTO sales SET property_id='${bidInfo.property_id}',client_id='${bidInfo.client_id}',sale_type='${saleType}',payment_mode='${bidInfo.payment_mode}',price='${bidInfo.price}',contract_start='${bidInfo.contract_start.toISOString().substring(0,10)}',contract_end='${bidInfo.contract_end.toISOString().substring(0,10)}',status='${obj.status}'`;
                 if (err) console.log(err);
                 db.query(query,(err, res)=>{
@@ -22,8 +18,12 @@ const save = (obj) => {
                db.query(queryUpdateBid,(err, res)=>{
                    if(err) console.log(err);
                });
-                let queryUpdateProperty = `UPDATE properties SET status='${obj.status}' WHERE id='${bidInfo.propertyId}'`;
+                let queryUpdateProperty = `UPDATE properties SET status='${obj.status}' WHERE id='${bidInfo.property_id}'`;
                db.query(queryUpdateProperty,(err, res)=>{
+                   if(err) console.log(err);
+               });
+                let queryRejectOtherBids = `UPDATE bid SET status='Rejected' WHERE property_id='${bidInfo.property_id}' AND status='Pending'`;
+               db.query(queryRejectOtherBids,(err, res)=>{
                    if(err) console.log(err);
                });
 

@@ -1,0 +1,164 @@
+{% set title="Report" %}
+{% extends "includes/main-layout.html" %}
+<!-- ======= Header ======= -->
+{% block header %}
+{% include "includes/main-header.html" %}
+{% endblock %}
+<!-- ======= Sidebar ======= -->
+{% block sidebar %}
+{% include layout %}
+{% endblock %}
+{% block content %}
+<div class="pagetitle">
+    <h1>Report</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">Reports</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Sales recorded
+
+                        <button class="btn btn-primary btn-sm bx-pull-right" id="btnExport">
+                            <i class="bi bi-file-pdf"></i> Export
+                        </button>
+                    </h5>
+                    <form role="form" class="form-inline row" id="form-filter">
+                        <div class="form-group" style="width: 25%">
+                            <labe>From</labe>
+                            <input type="date" id="dateStart" class="form-control"/>
+                        </div>
+                        <div class="form-group" style="width:25%">
+                            <labe>To</labe>
+                            <input type="date" id="dateEnd" class="form-control"/>
+                        </div>
+                        <div class="form-group" style="width: 20%">
+                            <br>
+                            <button class="btn btn-primary btn-sm" id="btnFilter">
+                                <i class="bi bi-filter"></i> Filter
+                            </button>
+                        </div>
+
+                    </form>
+                    <div id="report-heading"></div>
+                    <!-- Table with stripped rows -->
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Owner</th>
+                            <th scope="col">Client</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Contract start</th>
+                            <th scope="col">Contract end</th>
+                            <th scope="col">Sale type</th>
+                            <th scope="col">Approved on</th>
+                        </tr>
+                        </thead>
+                        <tbody id="users-data">
+                        </tbody>
+                    </table>
+                    <!-- End Table with stripped rows -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======= Footer ======= -->
+{% endblock %}
+{% block scripts %}
+<script>
+    let url = "http://localhost:3000/adminsold/bids";
+    if (localStorage.getItem("user_type").toLowerCase() === "landlord") {
+        url = "http://localhost:3000/sold/bids?landlord=" + localStorage.getItem("id");
+    } else if (localStorage.getItem("user_type").toLowerCase() === "client") {
+        url = "http://localhost:3000/bought/bids?client=" + localStorage.getItem("id");
+    }
+    loadReport();
+    document.querySelector("#btnExport").onclick = function () {
+        document.querySelectorAll(".pagetitle")[0].style = 'display:none';
+        document.querySelector("#btnExport").style = "display:none";
+        let el = document.querySelectorAll("header")[0];
+        el.remove();
+        if(document.querySelector("#dateStart").value!='' && document.querySelector("#dateEnd").value!=""){
+            document.querySelector("#report-heading").innerHTML = `Report of sales recorded from ${document.querySelector("#dateStart").value} to ${document.querySelector("#dateEnd").value}`
+        }else{
+            document.querySelector("#report-heading").innerHTML = `Report of sales recorded`;
+        }
+        document.querySelector("#form-filter").style="display:none";
+        document.querySelector("#report-heading").style="display:block";
+        window.print();
+        document.querySelector("#form-filter").removeAttribute("style");
+        document.querySelector("#report-heading").style="display:none";
+        document.querySelectorAll(".pagetitle")[0].style = 'display:block';
+        document.querySelector("#btnExport").style = "display:block";
+        document.querySelectorAll("body")[0].prepend(el);
+    }
+    document.querySelector("#dateStart").onchange = () => {
+        document.querySelector("#dateEnd").min = document.querySelector("#dateStart").value;
+        document.querySelector("#dateEnd").value = "";
+    }
+    document.querySelector("#btnFilter").onclick = function () {
+        event.preventDefault();
+        let dateStart = document.querySelector("#dateStart").value,
+            dateEnd = document.querySelector("#dateEnd").value;
+        console.log(localStorage.getItem("user_item"));
+        switch (localStorage.getItem("user_type").toLowerCase()) {
+            case "admin":
+                url = `http://localhost:3000/adminsold/bids?start=${dateStart}&end=${dateEnd}`;
+                break;
+            case "landlord":
+                url = `http://localhost:3000/sold/bids?landlord= ${localStorage.getItem("id")}&start=${dateStart}&end=${dateEnd}`;
+                break;
+            case "client":
+                url = `http://localhost:3000/bought/bids?client=${localStorage.getItem("id")}&start=${dateStart}&end=${dateEnd}`;
+                break;
+            default:
+        }
+        console.log(url);
+        loadReport();
+
+    }
+
+    async function loadReport() {
+        var requestOptions = {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        const data = await fetch(url, requestOptions)
+            .then(response => response.json())
+            .then(result => result)
+            .catch(error => console.log('error', error));
+        setContent(data);
+    }
+
+    function setContent(arr) {
+        var data = '';
+        for (var i = 0; i < arr.length; i++) {
+            data += `<tr>
+                <th scope="row">${i + 1}</th>
+                <td>${arr[i].owner_name}<br>${arr[i].owner_phone}</td>
+                <td>${arr[i].client_name}<br>${arr[i].client_phone}</td>
+                <td>${arr[i].price}</td>
+                <td>${arr[i].contract_start.replaceAll("T", " ").substring(0, 16)}</td>
+                <td>${arr[i].contract_end.replaceAll("T", " ").substring(0, 16)}</td>
+                <td>${arr[i].status}</td>
+                <td>${arr[i].created_at.replaceAll("T", " ").substring(0, 16)}</td>
+            </tr>`
+        }
+        document.querySelector("#users-data").innerHTML = data;
+    }
+</script>
+{% endblock %}

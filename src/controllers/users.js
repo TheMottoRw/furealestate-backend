@@ -1,8 +1,21 @@
 import db from "../db"
+import validators from "../helper/validators";
+const validateInput = (obj,resolve)=>{
+    console.log(obj)
+    if(obj.hasOwnProperty("name")===undefined || obj.hasOwnProperty("email")===undefined || obj.hasOwnProperty("phone")===undefined) resolve({status:false,message:"All fields are required"});
+    if(obj.name==="" || obj.email==="" || obj.phone==="") resolve({status:false,message:"All fields are required"});
+    const emailValidation = validators.validateEmailAddress(obj.email.trim());
+    const phoneValidation = validators.validateRwandanPhoneNumber(obj.phone.trim())
+    if(!emailValidation.status) resolve(emailValidation)
+    if(!phoneValidation.status) resolve(phoneValidation)
+
+}
 
 const save = (obj) => {
-    let query = `INSERT INTO users SET name='${obj.name}',phone='${obj.phone}',email='${obj.email}',user_type='${obj.user_type}',password='${obj.password}'`;
+    console.log(obj)
     return new Promise((resolve, reject) => {
+        validateInput(obj,resolve);
+        let query = `INSERT INTO users SET name='${obj.name}',phone='${obj.phone}',email='${obj.email}',user_type='${obj.user_type}',password='${obj.password}'`;
         db.query(query, (err, res) => {
             if (err) reject(err);
             resolve({status: true, message: "User account created successfully"});
@@ -39,6 +52,7 @@ const loadByType = (userType = "") => {
 const update = (id, obj) => {
     let queryId = `SELECT * FROM users WHERE id='${id}'`;
     return new Promise((resolve, reject) => {
+        validateInput(obj,resolve);
         db.query(queryId, (errId, resId) => {
             console.log(errId)
             if (errId) reject(errId);

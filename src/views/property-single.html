@@ -166,12 +166,16 @@
                 <div class="alert alert-success" id="responseSuccess" style="display:none"></div>
                 <div class="alert alert-danger" id="responseFail" style="display:none"></div>
                 <div class="col-12">
+                    <label for="order_price" class="form-label">Price</label>
+                    <input type="number" name="order_price" class="form-control" id="order_price">
+                </div>
+                <div class="col-12">
                     <label for="contract_start" class="form-label">Contract start</label>
-                    <input type="date" name="price" class="form-control" id="contract_start">
+                    <input type="date" name="contract_start" class="form-control" id="contract_start">
                 </div>
                 <div class="col-12">
                     <label for="contract_end" class="form-label">Contract end</label>
-                    <input type="date" name="contract_end" class="form-control" id="contract_end">
+                    <input type="date" name="contract_start" class="form-control" id="contract_end">
                 </div>
                 <br>
                 <div class="col-12">
@@ -196,7 +200,11 @@
     }
     document.querySelector("#btnSendOrder").onclick = () => {
         console.log("Send order requested");
-        sendOrder();
+        if (localStorage.getItem("user_type").toLowerCase() === "client") {
+            sendOrder();
+        }else{
+            alert("You are not allowed to make an order")
+        }
     }
 
     document.querySelector("#btnOrder").onclick = () => {
@@ -206,7 +214,7 @@
             alert("You should signin to make order");
             window.open("http://localhost:3000/v/login", "_blank");
         } else if (localStorage.getItem("user_type").toLowerCase() !== "client") {
-            alert("You should sign in as client to send your review");
+            alert("You should sign in as client to make your order");
         } else {
             console.log(`User logged in ${localStorage.getItem("id")}`)
             document.querySelector("#order-form").style = 'display:block';
@@ -216,9 +224,11 @@
     async function sendOrder() {
         let params_arr = document.URL.split("/")
         let propertyId = params_arr[params_arr.length - 1];
+        console.log(document.querySelector("#order_price").value);
         const data = {
             property_id: propertyId,
             client_id: localStorage.getItem("id"),
+            price: document.querySelector("#order_price").value,
             contract_start: document.querySelector("#contract_start").value,
             contract_end: document.querySelector("#contract_end").value
         }
@@ -292,9 +302,11 @@
             if (localStorage.getItem("id") === null) {
                 alert("You should signin to send your review");
                 window.open("http://localhost:3000/v/login", "_blank");
-            } else {
+            } else if(localStorage.getItem("user_type").toLowerCase() === "client"){
                 console.log(`User logged in ${localStorage.getItem("id")}`)
                 sendReview();
+            }else{
+                alert("You are not allowed to post a review")
             }
         }
 
@@ -438,16 +450,22 @@
     function setContentImages(arr) {
         let data = "";
         for (let i = 0; i < arr.length; i++) {
-            data += `<div class="carousel-item-b swiper-slide">`
             if (arr[i].photos !== '' && arr[i].photos !== 'undefined' && arr[i].photos.length > 0) {
                 let obj = JSON.parse(arr[i].photos);
-                data += `<img src="http://localhost:3000/images/${obj[0].filename}" alt="" class="img-a img-fluid">`
+                for (let x = 0; x < obj.length; x++) {
+                    data += `<div class="carousel-item-b swiper-slide">`
+
+                    data += `<img src="http://localhost:3000/images/${obj[0].filename}" alt="" class="img-a img-fluid">`
+                    data += `</div>`
+                }
             } else {
-                data += `<img src="/static/assets/img/slide-1.jpg" alt="" class="img-a img-fluid" >`
+                data += `<div class="carousel-item-b swiper-slide">
+                            <img src="/static/assets/img/slide-1.jpg" alt="" class="img-a img-fluid" >
+                        </div>`
             }
-            data += `</div>`
         }
-        // document.querySelector("#property-single-images").innerHTML = data;
+        console.log(data);
+        document.querySelector("#property-single-images").innerHTML = data;
     }
 </script>
 {% endblock %}

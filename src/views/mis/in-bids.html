@@ -99,10 +99,14 @@
                     <label>Bathroom: </label>&nbsp;${arr[i].bathroom}<br>
                     <label>Parking: </label>&nbsp;${arr[i].parking_slots}<br>
                     <label>Measurements: </label>&nbsp;${arr[i].sqm}m<sup>2</sup><br>
-                    <label>Price: </label>&nbsp;${new Intl.NumberFormat('en-US', {
+                    <label>Property Price: </label>&nbsp;${new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: 'USD'
             }).format(arr[i].price)}<br>
+                    <label>Order Price: </label>&nbsp;${new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(arr[i].bid_price)}<br>
                     <label>Address: </label>&nbsp;${arr[i].address}<br>
                     <label>Details: </label>&nbsp;${arr[i].description}<br><br><br>
 

@@ -88,6 +88,10 @@ viewRouter.get("/v/profile",async (req,res)=>{
     res.render(`${views_system_path}/users-profile.html`,{layout:readCookieRenderSidebar(req)});
 })
 
+viewRouter.get("/v/report",async (req,res)=>{
+    res.render(`${views_system_path}/reports.html`,{layout:readCookieRenderSidebar(req)});
+})
+
 
 
 export default viewRouter;

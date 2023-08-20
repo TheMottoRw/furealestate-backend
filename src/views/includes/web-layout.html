@@ -185,7 +185,7 @@
         let route = ["v","about","property","contact"]
         let links = document.querySelectorAll(".nav-link");
         let url = document.documentURI,urlArr = url.split("/");
-        if(urlArr[urlArr.length-1] == "") urlArr.pop();
+        if(urlArr[urlArr.length-1] == "" || !isNaN(urlArr[urlArr.length-1])) urlArr.pop();
         let currentUrl = urlArr[urlArr.length-1];
 
           if(currentUrl=="") currentUrl=urlArr[urlArr.length-2];

@@ -10,7 +10,7 @@ propertyRouter.post("/property",async (req,res)=>{
     uploadResponse(req, res,async function (err) {
         if (err) {
             // console.log(err);
-            res.json({status: false, message: "Something went wrong,file not uploaded"})
+            res.json({status: false, message: "Property photos should be provided"})
         }
         if (!err) {
             // it's all fine,do whatever
@@ -41,7 +41,21 @@ propertyRouter.get("/property/owner/:id",async (req,res)=>{
     res.send(response);
 })
 propertyRouter.post("/property/:id",async (req,res)=>{
-    const response = await properties.update(req.params.id,req.body);
-    res.send(response);
+
+    uploadResponse(req, res,async function (err) {
+        if (err) {
+            // console.log(err);
+            const response = await properties.update(req.params.id,req.body);
+            res.json(response)
+        }
+        if (!err) {
+            // it's all fine,do whatever
+            console.log(req.files);
+            req.body.photos = JSON.stringify(req.files);
+            const response = await properties.update(req.params.id,req.body);
+            res.send(response);
+        }
+    })
 })
+
 export default propertyRouter;

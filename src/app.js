@@ -13,6 +13,7 @@ import contactRouter from "./routes/contactRoutes";
 import cookieSession from "cookie-session";
 import dotenv from "dotenv";
 import multer from "multer";
+import bodyParser from "body-parser";
 
 const app = express();
 dotenv.config();
@@ -23,7 +24,8 @@ const njk = expressNunjucks(app, {
     noCache: true,
     autoescape: true
 });
-app.use(json())
+app.use(express.json({ limit: "200mb" }));
+app.use(express.urlencoded({ extended: true, limit: "200mb" }));
 app.use(userRouter)
 app.use(propertyRouter)
 app.use(saleRouter)
