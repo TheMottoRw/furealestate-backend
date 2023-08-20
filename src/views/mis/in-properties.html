@@ -42,9 +42,9 @@
                 "Content-Type": "application/json"
             }
         };
-        let url = "http://localhost:3000/properties";
+        let url = "http://localhost:3000/available/properties";
         if(localStorage.getItem("user_type").toLocaleLowerCase()==="landlord"){
-            url = `http://localhost:3000/property/owner/${localStorage.getItem('id')}`
+            url = `http://localhost:3000/available/owner/properties/${localStorage.getItem('id')}`
         }
         const data = await fetch(url, requestOptions)
             .then(response => response.json())
@@ -62,12 +62,12 @@
           <div class="row g-0">
             <div class="col-md-4">`
             if (arr[i].photos !== '' && arr[i].photos !== 'undefined' && arr[i].photos.length > 0) {
-                let obj = JSON.parse(arr[i].photos);
-                data += `<img src="http://localhost:3000/images/${obj[0].filename}" alt="" class="img-a img-fluid">`
+                let obj = JSON.parse(arr[i].photos.replace("\\uploads","\/uploads"));
+                data += `<img src="http://localhost:3000/images/${obj[0].filename}" alt="" class="img-a img-fluid" style="height:240px;width:300px">`
             }else{
-                data += `<img src="/static/assets/img/property-2.jpg" alt="" class="img-a img-fluid">`
+                data += `<img src="/static/assets/img/property-2.jpg" alt="" class="img-a img-fluid" style="height:240px;width:300px">`
             }
-              data+=`<br><br><br>
+              data+=`<br>
               <button data-id="${arr[i].id}" data-name="${arr[i].description}" class="btn btn-sm btn-danger bx-pull-right"><i class="bi bi-trash"></i></button>
             <a href="/v/update-property/${arr[i].id}" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i></a>
           

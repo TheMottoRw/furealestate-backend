@@ -63,7 +63,7 @@
             if(arr[i].bid_status.toLowerCase()=="rejected"){
                 data+=`<button data-id=${arr[i].id} data-status="${arr[i].status}"  btn-status='reject' class="btn btn-sm btn-danger bx-pull-right">${arr[i].bid_status}</button>`
             }else if(arr[i].bid_status.toLowerCase()=='accepted'){
-                data+=`<button data-id=${arr[i].id} data-status="${arr[i].status}" btn-status='approve' class="btn btn-sm btn-success bx-pull-right">${arr[i].bid_status}</button>`
+                data+=`<button data-id=${arr[i].id} data-status="${arr[i].status}" btn-status='approve' class="btn btn-sm btn-success bx-pull-right">${arr[i].sale_type=="Sell"?"Sold":"Rent"}</button>`
             }
             <!-- Bordered Tabs -->
             data+=`<ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab${arr[i].id}" role="tablist">

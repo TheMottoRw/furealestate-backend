@@ -28,6 +28,10 @@ propertyRouter.get("/available/properties",async (req,res)=>{
    const response = await properties.loadAvailable();
     res.send(response);
 })
+propertyRouter.get("/available/owner/properties/:owner",async (req,res)=>{
+   const response = await properties.loadAvailableByOwner(req.params.owner);
+    res.send(response);
+})
 propertyRouter.get("/property/:id",async (req,res)=>{
     const response = await properties.load(req.params.id);
     res.send(response);

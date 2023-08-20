@@ -49,6 +49,15 @@ const loadAvailable = (usageType = "") => {
         })
     })
 }
+const loadAvailableByOwner = (owner = "") => {
+    let queryType = `select p.*,u.name,u.phone,u.email from properties p INNER JOIN users u ON u.id=p.user_id where p.status IN ("For sale","For rent") and p.user_id=${owner}`;
+    return new Promise((resolve, reject) => {
+        db.query(queryType, (err, res) => {
+            if (err) reject(err);
+            resolve(res);
+        })
+    })
+}
 const loadByType = (usageType = "") => {
     let queryType = `select * from properties where property_usage_type=${usageType}`;
     return new Promise((resolve, reject) => {
@@ -97,5 +106,6 @@ export default {
     loadByType,
     loadByLandlord,
     loadAvailable,
+    loadAvailableByOwner,
     update
 }

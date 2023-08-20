@@ -62,7 +62,7 @@ const load = (id = 0) => {
     })
 }
 const loadByClient = (clientId = "") => {
-    let queryType = `select b.*,b.status as bid_status,p.code,p.brief_description,p.property_usage_type,p.description,p.photos,p.rooms,p.bathroom,p.parking_slots,p.sqm,p.year_built,p.price,p.address,p.status,c.name,c.phone,c.email,c.user_type from bid b INNER JOIN properties p ON p.id=b.property_id INNER JOIN users c ON c.id=b.client_id  where b.client_id=${clientId} and b.status IN ("Pending","Rejected") order by b.id desc`;
+    let queryType = `select b.*,b.price as bid_price,b.status as bid_status,p.code,p.brief_description,p.property_usage_type,p.description,p.photos,p.rooms,p.bathroom,p.parking_slots,p.sqm,p.year_built,p.price,p.address,p.status,c.name,c.phone,c.email,c.user_type from bid b INNER JOIN properties p ON p.id=b.property_id INNER JOIN users c ON c.id=b.client_id  where b.client_id=${clientId} and b.status IN ("Pending","Rejected") order by b.id desc`;
     return new Promise((resolve, reject) => {
         db.query(queryType, (err, res) => {
             if (err) reject(err);
@@ -71,7 +71,7 @@ const loadByClient = (clientId = "") => {
     })
 }
 const loadByProperty = (propertyId = "") => {
-    let queryType = `select b.*,b.status as bid_status,p.code,p.brief_description,p.property_usage_type,p.description,p.photos,p.rooms,p.bathroom,p.parking_slots,p.sqm,p.year_built,p.price,p.address,p.status,c.name,c.phone,c.email,c.user_type from bid b INNER JOIN properties p ON p.id=b.property_id INNER JOIN users c ON c.id=b.client_id where b.property_id='${propertyId}' and b.status IN ("Pending","Rejected") order by b.id desc`;
+    let queryType = `select b.*,b.price as bid_price,b.status as bid_status,p.code,p.brief_description,p.property_usage_type,p.description,p.photos,p.rooms,p.bathroom,p.parking_slots,p.sqm,p.year_built,p.price,p.address,p.status,c.name,c.phone,c.email,c.user_type from bid b INNER JOIN properties p ON p.id=b.property_id INNER JOIN users c ON c.id=b.client_id where b.property_id='${propertyId}' and b.status IN ("Pending","Rejected") order by b.id desc`;
     return new Promise((resolve, reject) => {
         db.query(queryType, (err, res) => {
             if (err) reject(err);
@@ -80,7 +80,7 @@ const loadByProperty = (propertyId = "") => {
     })
 }
 const loadByLandlord = (landlordId = "") => {
-    let queryType = `select b.*,b.status as bid_status,p.code,p.brief_description,p.property_usage_type,p.description,p.photos,p.rooms,p.bathroom,p.parking_slots,p.sqm,p.year_built,p.price,p.address,p.status,c.name,c.phone,c.email,c.user_type from bid b INNER JOIN properties p ON p.id=b.property_id INNER JOIN users c ON c.id=b.client_id where p.user_id='${landlordId}' order by b.id desc`;
+    let queryType = `select b.*,b.price as bid_price,b.status as bid_status,p.code,p.brief_description,p.property_usage_type,p.description,p.photos,p.rooms,p.bathroom,p.parking_slots,p.sqm,p.year_built,p.price,p.address,p.status,c.name,c.phone,c.email,c.user_type from bid b INNER JOIN properties p ON p.id=b.property_id INNER JOIN users c ON c.id=b.client_id where p.user_id='${landlordId}' AND b.status IN ("Pending","Rejected") order by b.id desc`;
     return new Promise((resolve, reject) => {
         db.query(queryType, (err, res) => {
             if (err) reject(err);
@@ -89,7 +89,7 @@ const loadByLandlord = (landlordId = "") => {
     })
 }
 const loadSoldOrRent = (user=0,type="Admin",dateObj = {}) => {
-    let queryType = `select b.*,b.status as bid_status,p.code,p.brief_description,p.property_usage_type,p.description,p.photos,p.rooms,p.bathroom,p.parking_slots,p.sqm,p.year_built,p.price,p.address,p.status,c.name as client_name,c.phone as client_phone,c.email as client_email,o.name as owner_name,o.phone as owner_phone,o.email as owner_email from bid b INNER JOIN properties p ON p.id=b.property_id INNER JOIN users c ON c.id=b.client_id INNER JOIN users o ON o.id=p.user_id where b.status ='Accepted'`;
+    let queryType = `select b.*,b.price as bid_price,b.status as bid_status,p.code,p.brief_description,p.property_usage_type,p.description,p.photos,p.rooms,p.bathroom,p.parking_slots,p.sqm,p.year_built,p.price,p.address,p.status,c.name as client_name,c.phone as client_phone,c.email as client_email,o.name as owner_name,o.phone as owner_phone,o.email as owner_email from bid b INNER JOIN properties p ON p.id=b.property_id INNER JOIN users c ON c.id=b.client_id INNER JOIN users o ON o.id=p.user_id where b.status ='Accepted'`;
     if(type=="Landlord"){
         queryType+=` and p.user_id='${user}'`;
     }
