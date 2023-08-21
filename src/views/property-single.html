@@ -451,11 +451,11 @@
         let data = "";
         for (let i = 0; i < arr.length; i++) {
             if (arr[i].photos !== '' && arr[i].photos !== 'undefined' && arr[i].photos.length > 0) {
-                let obj = JSON.parse(arr[i].photos.replace("\\uploads","\/uploads"));
+                let obj = JSON.parse(arr[i].photos.replaceAll("\\", "\/"));
                 for (let x = 0; x < obj.length; x++) {
                     data += `<div class="carousel-item-b swiper-slide">`
 
-                    data += `<img src="http://localhost:3000/images/${obj[0].filename}" alt="" class="img-a img-fluid">`
+                    data += `<img src="http://localhost:3000/images/${obj[i].filename}" alt="" class="img-a img-fluid">`
                     data += `</div>`
                 }
             } else {

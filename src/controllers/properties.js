@@ -8,13 +8,17 @@ const validateInput = (obj, resolve) => {
 
     if (obj.price <= 0) resolve({status: false, message: "Price should be a number greater than zero"});
     if (obj.rooms <= 0) resolve({status: false, message: "Rooms should be a number greater than zero"});
-    if (parseInt(obj.year_built) < 1970) resolve({status: false, message: "Year built should be a year greater than 1970"});
+    if (parseInt(obj.year_built) < 1970) resolve({
+        status: false,
+        message: "Year built should be a year greater than 1970"
+    });
 }
 const save = (obj) => {
     let query = `INSERT INTO properties SET user_id='${obj.user_id}',code='${obj.code}',brief_description='${obj.brief_description}',property_usage_type='${obj.property_usage_type}',description='${obj.description}',photos='${obj.photos}',rooms='${obj.rooms}',bathroom='${obj.bathroom}',parking_slots='${obj.parking_slots}',sqm='${obj.sqm}',year_built='${obj.year_built}',price='${obj.price}',address='${obj.address}',status='${obj.status}'`;
     return new Promise((resolve, reject) => {
         validateInput(obj, resolve)
-        if(!obj.hasOwnProperty("photos")) resolve({status:false,message:"Property photos should be provided"});
+        if (obj.photos === undefined) resolve({status: false, message: "Property photos should be provided"});
+        if (JSON.parse(obj.photos).length === 0) resolve({status: false, message: "Property photos should be provided"});
         db.query(query, (err, res) => {
             if (err) reject(err);
             resolve({status: true, message: "Property created successfully"});
@@ -84,9 +88,9 @@ const update = (id, obj) => {
             if (errId) reject(errId);
             console.log("data========================")
             if (resId.length > 0) {
-                if (obj.photos===undefined) {
+                if (obj.photos === undefined) {
                     obj.photos = resId[0].photos;
-                }else if(JSON.parse(obj.photos).length===0){
+                } else if (JSON.parse(obj.photos).length === 0) {
                     obj.photos = resId[0].photos;
                 }
                 let query = `UPDATE properties SET code='${obj.code}',brief_description='${obj.brief_description}',property_usage_type='${obj.property_usage_type}',description='${obj.description}',photos='${obj.photos}',rooms='${obj.rooms}',bathroom='${obj.bathroom}',parking_slots='${obj.parking_slots}',sqm='${obj.sqm}',year_built='${obj.year_built}',price='${obj.price}',address='${obj.address}',status='${obj.status}' WHERE id='${id}'`;

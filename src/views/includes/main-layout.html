@@ -14,8 +14,8 @@
     <link href="/static/niceadmin-assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
-<!--    <link href="https://fonts.gstatic.com" rel="preconnect">-->
-<!--    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">-->
+    <!--    <link href="https://fonts.gstatic.com" rel="preconnect">-->
+    <!--    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">-->
 
     <!-- Vendor CSS Files -->
     <link href="/static/niceadmin-assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -56,7 +56,8 @@
         &copy; Copyright <strong><span>Emile RUTAGENGWA</span></strong>. All Rights Reserved
     </div>
 </footer>
-<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
 
 <!-- Vendor JS Files -->
 <script src="/static/niceadmin-assets/vendor/apexcharts/apexcharts.min.js"></script>
@@ -72,11 +73,13 @@
 <script src="/static/niceadmin-assets/js/main.js"></script>
 <script src="/static/assets/js/utils.js"></script>
 <script>
-    document.querySelector("#aLogout").onclick=(event)=>{
+    document.querySelector("#aLogout").onclick = (event) => {
         event.preventDefault();
-        alert("Are you sure you want to logout");
-        localStorage.clear();
-        window.location='/v/login'
+        let isConfirmed = confirm("Are you sure you want to logout");
+        if (isConfirmed) {
+            localStorage.clear();
+            window.location = '/v/login';
+        }
     }
 </script>
 {% endblock %}

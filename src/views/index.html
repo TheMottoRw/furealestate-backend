@@ -229,7 +229,7 @@
                         <div class="card-box-a card-shadow" style="height: 550px">
                             <div class="img-box-a">`
             if (arr[i].photos !== '' && arr[i].photos !== 'undefined' && arr[i].photos.length > 0) {
-                let obj = JSON.parse(arr[i].photos.replace("\\uploads","\/uploads"));
+                let obj = JSON.parse(arr[i].photos.replaceAll("\\", "\/"));
                 data += `<img src="http://localhost:3000/images/${obj[0].filename}" alt="" class="img-a img-fluid">`
             } else {
                 data += `<img src="/static/assets/img/property-2.jpg" alt="" class="img-a img-fluid">`
@@ -291,7 +291,7 @@
         for (let i = 0; i < arr.length; i++) {
             data += `<div class="swiper-slide carousel-item-a intro-item bg-image"`
             if (arr[i].photos !== '' && arr[i].photos !== 'undefined' && arr[i].photos.length > 0) {
-                let obj = JSON.parse(arr[i].photos.replace("\\uploads","\/uploads"));
+                let obj = JSON.parse(arr[i].photos.replaceAll("\\", "\/"));
                 data += `style="background-image: url(http://localhost:3000/images/${obj[0].filename})">`
             } else {
                 data += `style="background-image: url(/static/assets/img/slide-1.jpg)">`
